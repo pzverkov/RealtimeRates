@@ -1,6 +1,7 @@
 package com.revolut.realtimerates.domain.room;
+import android.content.Context;
+
 import com.revolut.realtimerates.util.Constants;
-import com.revolut.realtimerates.RateApp;
 
 import androidx.room.Room;
 
@@ -9,7 +10,7 @@ public class DatabaseManager {
     private static DatabaseManager instance;
     private AppDatabase appDatabase;
 
-    public static DatabaseManager getInstance() {
+    public static DatabaseManager getInstance(Context context) {
         if (instance == null) {
             instance = new DatabaseManager();
 
@@ -22,7 +23,7 @@ public class DatabaseManager {
                 //TODO: For checking encrypted state
                 //instance.appDatabase.getDatabaseState()
             } else {
-                instance.appDatabase = Room.databaseBuilder(RateApp.getInstance(), AppDatabase.class, Constants.CURRENCY_RATES).build();
+                instance.appDatabase = Room.databaseBuilder(context, AppDatabase.class, Constants.CURRENCY_RATES).build();
             }
         }
         return instance;

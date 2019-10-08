@@ -41,7 +41,7 @@ public class CurrencyExchangeFragment extends Fragment implements OnUiProcessing
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         viewModel = ViewModelProviders.of(this).get(CurrencyViewModel.class);
-        adapter = new CurrencyAdapter(this, viewModel.getStoredValues(), viewModel);
+        adapter = new CurrencyAdapter(this, viewModel.getStoredValues(getActivity()), viewModel);
 
         binding = DataBindingUtil.inflate(inflater, R.layout.currency_fragment, container, false);
         binding.setViewModel(viewModel);
@@ -64,7 +64,7 @@ public class CurrencyExchangeFragment extends Fragment implements OnUiProcessing
 
     @Override
     public void onPause() {
-        viewModel.pause();
+        viewModel.pause(getActivity().getApplicationContext());
         super.onPause();
     }
 
@@ -153,8 +153,10 @@ public class CurrencyExchangeFragment extends Fragment implements OnUiProcessing
             MainViewModel mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
             mainViewModel.getConnected().observe(this, connected -> {
                 if (connected == null || !connected) {
-                    viewModel.pause();
-                    NotificationUtil.showSnackBarNotification(binding.getRoot(), RateApp.getInstance().getString(R.string.no_internet));
+                    viewModel.pause(getActivity());
+                    if (getActivity() != null) {
+                        NotificationUtil.showSnackBarNotification(binding.getRoot(), getActivity().getString(R.string.no_internet));
+                    }
                     return;
                 }
                 viewModel.refresh();

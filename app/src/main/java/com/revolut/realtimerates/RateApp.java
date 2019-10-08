@@ -7,17 +7,10 @@ import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
 public class RateApp extends Application {
-    private static RateApp instance;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
-        Fabric.with(instance, new Crashlytics());
-        DatabaseManager.getInstance();
-    }
-
-    public static RateApp getInstance() {
-        return instance;
+        Fabric.with(this, new Crashlytics());
+        DatabaseManager.getInstance(this);
     }
 }

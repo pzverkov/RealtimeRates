@@ -1,10 +1,14 @@
 package com.revolut.realtimerates.presentation.ui.viewModels;
 
+import android.content.Context;
+
 import com.revolut.realtimerates.domain.repository.Repository;
 import com.revolut.realtimerates.domain.data.model.CurrencyDTO;
 import com.revolut.realtimerates.domain.room.CurrencyItem;
 import com.revolut.realtimerates.util.OnCallResponse;
 import com.revolut.realtimerates.util.Logger;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -82,9 +86,9 @@ public class CurrencyViewModel extends ViewModel implements OnCallResponse, OnVi
         liveData.postValue(data);
     }
 
-    public List<CurrencyItem> getStoredValues() {
+    public List<CurrencyItem> getStoredValues(Context context) {
         try {
-            data = repository.getDefaultData();
+            data = repository.getDefaultData(context);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -100,10 +104,10 @@ public class CurrencyViewModel extends ViewModel implements OnCallResponse, OnVi
         repository.startSync(baseCurrency.get());
     }
 
-    public void pause() {
+    public void pause(@NotNull Context context) {
         repository.stopSync();
         Logger.i("CurrencyViewModel", "Trying to add data : " + data.size() + " items");
-        repository.storeItems(data);
+        repository.storeItems(context, data);
     }
 
     @Override

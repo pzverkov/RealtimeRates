@@ -1,11 +1,15 @@
 package com.revolut.realtimerates.domain.repository;
 
+import android.content.Context;
+
 import com.revolut.realtimerates.domain.data.model.CurrencyDTO;
 import com.revolut.realtimerates.domain.room.CurrencyItem;
 import com.revolut.realtimerates.domain.room.DatabaseManager;
 import com.revolut.realtimerates.domain.data.network.wrapper.NetworkWrapper;
 import com.revolut.realtimerates.domain.data.network.api.CurrencyRestService;
 import com.revolut.realtimerates.util.Logger;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Closeable;
 import java.util.List;
@@ -59,8 +63,8 @@ public class Repository implements Closeable {
         if (syncDisposable != null && !syncDisposable.isDisposed()) syncDisposable.dispose();
     }
 
-    public final void storeItems(List<CurrencyItem> items) {
-        Executors.newSingleThreadExecutor().submit(() -> DatabaseManager.getInstance().getAppDatabase().currencyDao().insertList(items));
+    public final void storeItems(@NotNull Context context, List<CurrencyItem> items) {
+        Executors.newSingleThreadExecutor().submit(() -> DatabaseManager.getInstance(context).getAppDatabase().currencyDao().insertList(items));
     }
 
     @Override
@@ -68,8 +72,8 @@ public class Repository implements Closeable {
         stopSync();
     }
 
-    public List<CurrencyItem> getDefaultData() throws ExecutionException, InterruptedException {
-        Callable<List<CurrencyItem>> callable = () -> DatabaseManager.getInstance().getAppDatabase().currencyDao().getAll();
+    public List<CurrencyItem> getDefaultData(Context context) throws ExecutionException, InterruptedException {
+        Callable<List<CurrencyItem>> callable = () -> DatabaseManager.getInstance(context).getAppDatabase().currencyDao().getAll();
         Future<List<CurrencyItem>> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

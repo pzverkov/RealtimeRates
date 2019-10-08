@@ -27,19 +27,21 @@ public class CurrencyItem implements Comparable<CurrencyItem>, Cloneable, Serial
         return description;
     }
 
-    public void setDescription(@NonNull String description) {
+    public CurrencyItem setDescription(@NonNull String description) {
         this.description = description;
+        return this;
     }
 
     public float getValue() {
         return value;
     }
 
-    public void setValue(float value) {
+    public CurrencyItem setValue(float value) {
         this.value = value;
+        return this;
     }
 
-      @Override
+    @Override
     public int compareTo(@NonNull CurrencyItem item) {
         return (getDescription() == null || item.getDescription() == null) ? 0 : getDescription().compareTo(item.getDescription());
     }
