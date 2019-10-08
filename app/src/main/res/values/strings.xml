@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Realtime Rates</string>
+    <string name="network_error">There is no network connection</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="no_data">There is no data. Please wait for synchronization</string>
+    <string name="no_internet">There is no internet connection.</string>
+</resources>
